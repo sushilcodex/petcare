@@ -1,0 +1,1717 @@
+openapi: 3.0.3
+info:
+  title: Pawtaker APIs
+  version: 1.0.0
+  description: Backend APIs for Pawtaker
+paths:
+  /api/v1/accounts/change-password/:
+    post:
+      operationId: api_v1_accounts_change_password_create
+      description: |-
+        This function help user to change the password
+        after login.
+        Validating user old password.
+      tags:
+      - User-Account-Registeration Api's
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePassword'
+          description: ''
+  /api/v1/accounts/register/:
+    post:
+      operationId: api_v1_accounts_register_create
+      description: User Registration API.
+      tags:
+      - User-Account-Registeration Api's
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/accounts/reset/change-password/{uid}/:
+    post:
+      operationId: api_v1_accounts_reset_change_password_create
+      description: |-
+        User reset password function when reset request
+        received by email.
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - User-Account-Registeration Api's
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          description: No response body
+  /api/v1/accounts/send-password-reset-link/:
+    post:
+      operationId: api_v1_accounts_send_password_reset_link_create
+      description: Sending email to user for resetting the password.
+      tags:
+      - User-Account-Registeration Api's
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordLinkRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordLinkRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordLinkRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetPasswordLink'
+          description: ''
+  /api/v1/accounts/user-details/:
+    get:
+      operationId: api_v1_accounts_user_details_retrieve
+      description: User details
+      tags:
+      - User-Account-Registeration Api's
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+  /api/v1/accounts/user-profile-update/:
+    patch:
+      operationId: api_v1_accounts_user_profile_update_partial_update
+      description: User can update all the fields except the email. Parent Name, Phone
+        Number, Country Code, Address and Email are required fields.
+      summary: User Profile Update Api
+      tags:
+      - User-Account-Registeration Api's
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileUpdate'
+          description: ''
+  /api/v1/blog/blogs/:
+    get:
+      operationId: api_v1_blog_blogs_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBlogListList'
+          description: ''
+    post:
+      operationId: api_v1_blog_blogs_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogListRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BlogListRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BlogListRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogList'
+          description: ''
+  /api/v1/blog/blogs/{id}/:
+    get:
+      operationId: api_v1_blog_blogs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogList'
+          description: ''
+    put:
+      operationId: api_v1_blog_blogs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogListRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BlogListRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BlogListRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogList'
+          description: ''
+    patch:
+      operationId: api_v1_blog_blogs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBlogListRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBlogListRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBlogListRequest'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogList'
+          description: ''
+    delete:
+      operationId: api_v1_blog_blogs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/login/:
+    post:
+      operationId: api_v1_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - Authentication APIs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomTokenObtainPair'
+          description: ''
+  /api/v1/pet/breed-listing/{uuid}:
+    get:
+      operationId: api_v1_pet_breed_listing_list
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Other Pet Related Api's
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetBreedListing'
+          description: ''
+  /api/v1/pet/favourite-listing/:
+    get:
+      operationId: api_v1_pet_favourite_listing_list
+      tags:
+      - Other Pet Related Api's
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FavouritePet'
+          description: ''
+  /api/v1/pet/favourite-pet/{uuid}:
+    post:
+      operationId: api_v1_pet_favourite_pet_create
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Other Pet Related Api's
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavouritePetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FavouritePetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FavouritePetRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavouritePet'
+          description: ''
+  /api/v1/pet/like-listing/:
+    get:
+      operationId: api_v1_pet_like_listing_list
+      tags:
+      - Other Pet Related Api's
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LikePet'
+          description: ''
+  /api/v1/pet/like-pet/{uuid}:
+    post:
+      operationId: api_v1_pet_like_pet_create
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Other Pet Related Api's
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LikePetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LikePetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LikePetRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LikePet'
+          description: ''
+  /api/v1/pet/petmedia/:
+    post:
+      operationId: api_v1_pet_petmedia_create
+      tags:
+      - Pet Media APIs
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PetProfileMediaCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PetProfileMediaCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetProfileMediaCreate'
+          description: ''
+  /api/v1/pet/petmedia/{id}/:
+    delete:
+      operationId: api_v1_pet_petmedia_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          title: File ID
+        description: A UUID string identifying this pet media file.
+        required: true
+      tags:
+      - Pet Media APIs
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/pet/petprofile/:
+    get:
+      operationId: api_v1_pet_petprofile_list
+      tags:
+      - Pet Profile Apis
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetProfileList'
+          description: ''
+    post:
+      operationId: api_v1_pet_petprofile_create
+      tags:
+      - Pet Profile Apis
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetProfileCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PetProfileCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PetProfileCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetProfileCreateUpdate'
+          description: ''
+  /api/v1/pet/petprofile/{id}/:
+    get:
+      operationId: api_v1_pet_petprofile_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          title: Pet ID
+        description: A UUID string identifying this pet profile.
+        required: true
+      tags:
+      - Pet Profile Apis
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetProfileDetails'
+          description: ''
+    patch:
+      operationId: api_v1_pet_petprofile_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          title: Pet ID
+        description: A UUID string identifying this pet profile.
+        required: true
+      tags:
+      - Pet Profile Apis
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPetProfileCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPetProfileCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPetProfileCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetProfileCreateUpdate'
+          description: ''
+    delete:
+      operationId: api_v1_pet_petprofile_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          title: Pet ID
+        description: A UUID string identifying this pet profile.
+        required: true
+      tags:
+      - Pet Profile Apis
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/pet/type-listing/:
+    get:
+      operationId: api_v1_pet_type_listing_list
+      tags:
+      - Other Pet Related Api's
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetTypeListing'
+          description: ''
+  /api/v1/token/refresh/:
+    post:
+      operationId: api_v1_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - Authentication Api's
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    BlankEnum:
+      enum:
+      - ''
+    BlogList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        slug:
+          type: string
+          nullable: true
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        excerpt:
+          type: string
+          nullable: true
+        description:
+          type: string
+        category:
+          type: integer
+        image:
+          type: string
+          format: uri
+          nullable: true
+        is_draft:
+          type: boolean
+        published_date:
+          type: string
+          format: date-time
+        publisher_name:
+          type: string
+          maxLength: 100
+      required:
+      - category
+      - description
+      - id
+      - published_date
+      - publisher_name
+      - title
+    BlogListRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        slug:
+          type: string
+          nullable: true
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        excerpt:
+          type: string
+          nullable: true
+        description:
+          type: string
+          minLength: 1
+        category:
+          type: integer
+        image:
+          type: string
+          format: binary
+          nullable: true
+        is_draft:
+          type: boolean
+        published_date:
+          type: string
+          format: date-time
+        publisher_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+      required:
+      - category
+      - description
+      - published_date
+      - publisher_name
+      - title
+    ChangePassword:
+      type: object
+      properties:
+        old_password:
+          type: string
+        new_password:
+          type: string
+        confirm_new_password:
+          type: string
+      required:
+      - confirm_new_password
+      - new_password
+      - old_password
+    ChangePasswordRequest:
+      type: object
+      properties:
+        old_password:
+          type: string
+          minLength: 1
+        new_password:
+          type: string
+          minLength: 1
+        confirm_new_password:
+          type: string
+          minLength: 1
+      required:
+      - confirm_new_password
+      - new_password
+      - old_password
+    CustomTokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+      required:
+      - email
+    CustomTokenObtainPairRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    FavouritePet:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Pet ID
+        pet_name:
+          type: string
+          maxLength: 250
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        weight:
+          type: number
+          format: double
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+        number_of_nails:
+          type: integer
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        user:
+          type: string
+          format: uuid
+          title: User ID
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+          nullable: true
+        primary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        secondary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        weight_measurement:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - id
+      - pet_name
+      - slug
+      - user
+    FavouritePetRequest:
+      type: object
+      properties:
+        pet_name:
+          type: string
+          minLength: 1
+          maxLength: 250
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        weight:
+          type: number
+          format: double
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+        number_of_nails:
+          type: integer
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        user:
+          type: string
+          format: uuid
+          title: User ID
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+          nullable: true
+        primary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        secondary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        weight_measurement:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - pet_name
+      - slug
+      - user
+    LikePet:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Pet ID
+        pet_name:
+          type: string
+          maxLength: 250
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        weight:
+          type: number
+          format: double
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+        number_of_nails:
+          type: integer
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        user:
+          type: string
+          format: uuid
+          title: User ID
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+          nullable: true
+        primary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        secondary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        weight_measurement:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - id
+      - pet_name
+      - slug
+      - user
+    LikePetRequest:
+      type: object
+      properties:
+        pet_name:
+          type: string
+          minLength: 1
+          maxLength: 250
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        weight:
+          type: number
+          format: double
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+        number_of_nails:
+          type: integer
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        user:
+          type: string
+          format: uuid
+          title: User ID
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+          nullable: true
+        primary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        secondary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        weight_measurement:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - pet_name
+      - slug
+      - user
+    Nested:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Breed ID
+        pet_breed:
+          type: string
+          nullable: true
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+      required:
+      - id
+      - pet_type
+      - slug
+    NullEnum:
+      enum:
+      - null
+    PaginatedBlogListList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogList'
+    PatchedBlogListRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        slug:
+          type: string
+          nullable: true
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        excerpt:
+          type: string
+          nullable: true
+        description:
+          type: string
+          minLength: 1
+        category:
+          type: integer
+        image:
+          type: string
+          format: binary
+          nullable: true
+        is_draft:
+          type: boolean
+        published_date:
+          type: string
+          format: date-time
+        publisher_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+    PatchedPetProfileCreateUpdateRequest:
+      type: object
+      properties:
+        pet_name:
+          type: string
+          minLength: 1
+          maxLength: 250
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        primary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        secondary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+          nullable: true
+        weight_measurement:
+          type: string
+          format: uuid
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/PetProfileMediaListRequest'
+          writeOnly: true
+    PatchedUserProfileUpdateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        parent_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        country_code:
+          type: string
+          maxLength: 255
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 250
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 250
+        image:
+          type: string
+          format: binary
+          nullable: true
+        old_password:
+          type: string
+          minLength: 1
+        new_password:
+          type: string
+          minLength: 1
+        confirm_new_password:
+          type: string
+          minLength: 1
+    PetBreedListing:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Breed ID
+        pet_breed:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - id
+    PetGenderEnum:
+      enum:
+      - male
+      - female
+      type: string
+      description: |-
+        * `male` - MALE
+        * `female` - FEMALE
+    PetProfileCreateUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Pet ID
+        pet_name:
+          type: string
+          maxLength: 250
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        primary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        secondary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+          nullable: true
+        weight_measurement:
+          type: string
+          format: uuid
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+      required:
+      - id
+      - pet_name
+    PetProfileCreateUpdateRequest:
+      type: object
+      properties:
+        pet_name:
+          type: string
+          minLength: 1
+          maxLength: 250
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        primary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        secondary_breed:
+          type: string
+          format: uuid
+          title: Breed ID
+          nullable: true
+        pet_type:
+          type: string
+          format: uuid
+          title: Pettype ID
+          nullable: true
+        weight_measurement:
+          type: string
+          format: uuid
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/PetProfileMediaListRequest'
+          writeOnly: true
+      required:
+      - images
+      - pet_name
+    PetProfileDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Pet ID
+        pet_name:
+          type: string
+          maxLength: 250
+        weight:
+          type: number
+          format: double
+          nullable: true
+        pet_gender:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PetGenderEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        primary_breed:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        secondary_breed:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        weight_measurement:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        pet_type:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        media_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+        pet_dob:
+          type: string
+          format: date
+          nullable: true
+        special_comments:
+          type: string
+          nullable: true
+          maxLength: 450
+      required:
+      - id
+      - media_files
+      - pet_name
+      - pet_type
+      - primary_breed
+      - secondary_breed
+      - weight_measurement
+    PetProfileList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Pet ID
+        pet_name:
+          type: string
+          maxLength: 250
+        pet_gender:
+          type: string
+          readOnly: true
+        primary_breed:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        secondary_breed:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        pet_type:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        media_url:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - media_url
+      - pet_gender
+      - pet_name
+      - pet_type
+      - primary_breed
+      - secondary_breed
+    PetProfileMediaCreate:
+      type: object
+      properties:
+        file:
+          type: array
+          items:
+            type: string
+      required:
+      - file
+    PetProfileMediaCreateRequest:
+      type: object
+      properties:
+        file:
+          type: array
+          items:
+            type: string
+            format: binary
+      required:
+      - file
+    PetProfileMediaList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: File ID
+        featured:
+          type: boolean
+        file:
+          type: string
+          format: uri
+          readOnly: true
+          nullable: true
+      required:
+      - file
+      - id
+    PetProfileMediaListRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: File ID
+        featured:
+          type: boolean
+      required:
+      - id
+    PetTypeListing:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Pettype ID
+        pet_type:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - id
+    ResetPasswordLink:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+      required:
+      - email
+    ResetPasswordLinkRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 255
+      required:
+      - email
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    User:
+      type: object
+      properties:
+        parent_name:
+          type: string
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        country_code:
+          type: string
+          maxLength: 255
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 250
+        image:
+          type: string
+          format: uri
+          nullable: true
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 250
+      required:
+      - email
+      - parent_name
+    UserDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: User ID
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        parent_name:
+          type: string
+          maxLength: 255
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 250
+        image_url:
+          type: string
+          readOnly: true
+        pet:
+          type: string
+          readOnly: true
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 250
+      required:
+      - email
+      - id
+      - image_url
+      - parent_name
+      - pet
+    UserPasswordResetRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 15
+        password2:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 15
+      required:
+      - password
+      - password2
+    UserProfileUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          title: User ID
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        parent_name:
+          type: string
+          maxLength: 255
+        country_code:
+          type: string
+          maxLength: 255
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 250
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 250
+        image_url:
+          type: string
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          nullable: true
+        old_password:
+          type: string
+        new_password:
+          type: string
+        confirm_new_password:
+          type: string
+      required:
+      - address
+      - country_code
+      - email
+      - id
+      - image_url
+      - parent_name
+      - phone_number
+    UserRequest:
+      type: object
+      properties:
+        parent_name:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        country_code:
+          type: string
+          maxLength: 255
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 250
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 15
+        password2:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 15
+        image:
+          type: string
+          format: binary
+          nullable: true
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 250
+      required:
+      - email
+      - parent_name
+      - password
+      - password2
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

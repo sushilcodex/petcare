@@ -1,0 +1,3 @@
+WELCOME_EMAIL_SUBJECT = "Welcome to Petcare!"
+
+RESET_PASSWORD_EMAIL_SUBJECT = "Reset Password"
